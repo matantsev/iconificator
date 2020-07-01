@@ -8,6 +8,7 @@ import torchvision.transforms as transforms
 import torchvision.models as models
 
 from transfer.model.global_props import device
+from transfer.run_transfer import run_style_transfer
 
 # desired size of the output image
 imsize = 512 if torch.cuda.is_available() else 128  # use small size if no gpu
@@ -57,3 +58,13 @@ cnn_normalization_std = torch.tensor([0.229, 0.224, 0.225]).to(device)
 
 input_img = content_img.clone()
 plt.figure()
+
+output = run_style_transfer(cnn, cnn_normalization_mean, cnn_normalization_std,
+                            content_img, style_img, input_img)
+
+plt.figure()
+imshow(output, title='Output Image')
+
+# sphinx_gallery_thumbnail_number = 4
+plt.ioff()
+plt.show()
