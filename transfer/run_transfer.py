@@ -1,19 +1,20 @@
-
 import torch.optim as optim
 from transfer.model.get_style_model import get_style_model_and_losses
+
 
 def _get_input_optimizer(input_img):
     # this line to show that input is a parameter that requires a gradient
     optimizer = optim.LBFGS([input_img.requires_grad_()])
     return optimizer
 
+
 def run_style_transfer(cnn, normalization_mean, normalization_std,
                        content_img, style_img, input_img, num_steps=300,
                        style_weight=1000000, content_weight=1):
     """Run the style transfer."""
     print('Building the style transfer model..')
-    model, style_losses, content_losses = get_style_model_and_losses(cnn,
-        normalization_mean, normalization_std, style_img, content_img)
+    model, style_losses, content_losses = get_style_model_and_losses(cnn, normalization_mean, normalization_std,
+                                                                     style_img, content_img)
     optimizer = _get_input_optimizer(input_img)
 
     print('Optimizing..')

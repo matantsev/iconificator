@@ -1,5 +1,6 @@
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 def gram_matrix(input):
     a, b, c, d = input.size()  # a=batch size(=1)
