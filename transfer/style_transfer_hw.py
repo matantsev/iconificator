@@ -20,16 +20,33 @@ loader = transforms.Compose([
 def image_loader(image_name):
     image = Image.open(image_name)
     # fake batch dimension required to fit network's input dimensions
-    image = loader(image).unsqueeze(0)
-    return image.to(device, torch.float)
+    # image = loader(image).unsqueeze(0)
+    # return image.to(device, torch.float)
+    return image
+
+def crop_to_image(img_src,img_crop):
+    src_width, src_height = img_src.size # Get dimensions
+
+    return img_crop.resize((src_width, src_height), Image.ANTIALIAS)
 
 
-style_img = image_loader("./transfer/images/picasso.jpg")
+def format_image(img):
+    return loader(img).unsqueeze(0).to(device, torch.float)
 
-content_img = image_loader("./transfer/images/dancing.jpg")
 
-assert style_img.size() == content_img.size(), \
-    "we need to import style and content images of the same size"
+style_img = image_loader("./icon_samples/2.jpg")
+
+# style_img = image_loader("./transfer/images/picasso.jpg")
+
+# content_img = image_loader("./transfer/images/do_not_push.jpg")
+
+content_img = image_loader("./transfer/images/picasso.jpg")
+# assert style_img.size() == content_img.size(), \
+#     "we need to import style and content images of the same size"
+if style_img.size != content_img.size:
+    style_img = crop_to_image(content_img, style_img)
+style_img = format_image(style_img)
+content_img = format_image(content_img)
 
 unloader = transforms.ToPILImage()  # reconvert into PIL image
 
